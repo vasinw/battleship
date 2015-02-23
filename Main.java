@@ -1,0 +1,39 @@
+import java.util.Scanner;
+
+public class Main {
+
+  public static void main(String[] args) {
+    Scanner input = new Scanner(System.in);
+    Grid grid = makeInitialGrid();
+    int move = 0;
+
+    while(!grid.areAllSunk()){
+      System.out.println(grid.toPlayerString());
+      System.out.println("enter an attack");
+      String token = input.next();
+      move = move+1;
+      Coordinate thismove = Util.parseCoordinate(token);
+      if(grid.wouldAttackSucceed(thismove)){
+        System.out.println("direct hit!");
+      }
+      grid.attackCell(thismove);
+    }
+    System.out.println("all ships are sank!");
+    System.out.println("total move = " + move);
+  }
+
+  private static Grid makeInitialGrid() {
+    Grid grid = new Grid();
+
+    String[] coords = { "A7", "B1", "B4", "D3", "F7", "H1", "H4" };
+    int[] sizes = { 2, 4, 1, 3, 1, 2, 5 };
+    boolean[] isDowns = { false, true, true, false, false, true, false };
+
+    for (int i = 0; i < coords.length; i++) {
+        Coordinate c = Util.parseCoordinate(coords[i]);
+        grid.placeShip(c, sizes[i], isDowns[i]);
+    }
+
+    return grid;
+  }
+}
